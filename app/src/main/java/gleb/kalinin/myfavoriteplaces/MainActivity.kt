@@ -1,12 +1,15 @@
 package gleb.kalinin.myfavoriteplaces
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import gleb.kalinin.myfavoriteplaces.models.Place
 import gleb.kalinin.myfavoriteplaces.models.UserMap
 import kotlinx.android.synthetic.main.activity_main.*
 
+private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,7 +21,18 @@ class MainActivity : AppCompatActivity() {
         // Set layout manager on the recycler view (rv)
         rvMaps.layoutManager = LinearLayoutManager (this)
         // Set adapter on the recycler view (rv)
-        rvMaps.adapter = MapsAdapter (this, userMaps)
+        rvMaps.adapter = MapsAdapter (this, userMaps, object: MapsAdapter.OnClickListener{
+            override fun onItemClick(position: Int) {
+                Log.i(TAG, "onItemClick $position")
+                // When user taps on view in RV, navigate to new Activity
+                val intent = Intent(this@MainActivity, DisplayMapActivity::class.java)
+                startActivity(intent)
+            }
+        })
+
+
+
+
     }
 
 
