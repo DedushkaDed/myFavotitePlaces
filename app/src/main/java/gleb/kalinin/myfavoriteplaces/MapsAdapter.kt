@@ -29,7 +29,9 @@ class MapsAdapter(val context: Context, val userMaps: List<UserMap>, val onClick
         val userMap = userMaps[position]
         holder.itemView.setOnClickListener {
             Log.i(TAG, "Нажали на позицию $position")
-            onClickListener.onItemClick(position) // Соединил MainActivity + MapsAdapter -> Если  RV (recyclerView) был нажат -> Передаём эту информацию в MainActivity
+
+            // Соединил MainActivity + MapsAdapter -> Если  RV (recyclerView) был нажат -> Передаём эту информацию в MainActivity
+            onClickListener.onItemClick(position)
         }
         val textViewTitle = holder.itemView.findViewById<TextView>(android.R.id.text1)
         textViewTitle.text = userMap.title
