@@ -1,6 +1,7 @@
 package gleb.kalinin.myfavoriteplaces
 
 import android.app.Activity
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -16,10 +17,12 @@ import com.google.android.gms.maps.model.MarkerOptions
 import gleb.kalinin.myfavoriteplaces.models.Place
 import gleb.kalinin.myfavoriteplaces.models.UserMap
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.*
 
 const val EXTRA_MAP_TITLE = "EXTRA_MAP_TITLE"
 const val EXTRA_USER_MAP = "EXTRA_USER_MAP"
 private const val REQUEST_CODE = 1234
+private const val FILE_NAME = "UserMaps.data"
 private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
 
@@ -30,7 +33,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        userMaps = generateSampleData().toMutableList()
+        // Чтение с локального файла БД -> deserializeUserMaps
+        userMaps = deserializeUserMaps(this).toMutableList()
+
         // Set layout manager on the recycler view (rv)
         rvMaps.layoutManager = LinearLayoutManager (this)
         // Set adapter on the recycler view (rv)
@@ -50,6 +55,34 @@ class MainActivity : AppCompatActivity() {
             showAlertDialog()
 
         }
+    }
+
+
+
+
+    // Чтение с локального файла БД -> deserializeUserMaps
+    private fun deserializeUserMaps (context: Context) : List<UserMap> {
+        Log.i(TAG, " deserializeUserMaps - функция")
+        val dataFile = getDataFile(context)
+        // if dataFile - doesn't exists
+        if (!dataFile.exists()) {
+            Log.i(TAG, " База данных не существует!")
+            return emptyList()
+        }
+        ObjectInputStream(FileInputStream(dataFile)).use { return it.readObject() as List<UserMap> }
+    }
+
+    // Записываем данные в файл БД -> serializeUserMaps
+    private fun serializeUserMaps (context: Context, userMap: List<UserMap>) {
+        Log.i(TAG, " функция - serializeUserMaps")
+        // Taking FileOutputStream passing it to ObjectOutputStream. It means we can take любой object and write it to the file.
+        // And thing what we're writing it's 'userMaps'
+        ObjectOutputStream(FileOutputStream(getDataFile(context))).use { it.writeObject(userMaps) }
+    }
+
+    private fun getDataFile (context: Context): File {
+        Log.i(TAG, "Получаем файлы из: ${context.filesDir}")
+        return File(context.filesDir, FILE_NAME)
     }
 
     private fun showAlertDialog() {
@@ -91,6 +124,8 @@ class MainActivity : AppCompatActivity() {
             userMaps.add(userMap)
             // Notify adapter something has changed in the data.
             mapAdapter.notifyItemInserted(userMaps.size - 1)
+            // Записываем данные в файл БД, при сохранении новых обьектов -> serializeUserMaps
+            serializeUserMaps (this, userMaps)
 
         }
         super.onActivityResult(requestCode, resultCode, data)
