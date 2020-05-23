@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Заголовок"
+        android:hint="Название карты"
         android:inputType="textPersonName"
-        android:textSize="24sp" />
+        android:textSize="18sp" />
 </LinearLayout>

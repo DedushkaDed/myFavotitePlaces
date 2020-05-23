@@ -101,9 +101,10 @@ class CreateMapActivity : AppCompatActivity(), OnMapReadyCallback {
             Log.i(TAG, "Длинное нажатие по карте")
             showAlertDialog(LatLng)
         }
-        // Default google lines
-        val myHouse = LatLng(37.4, -122.1)
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myHouse, 10f))
+        // Начальная позиция при создании новой карты.
+        // 1f - world 5f - continent 10f - city 15f- streets, 20f- buildings
+        val tyumenCity = LatLng(57.154813, 65.561687)
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(tyumenCity, 10f))
     }
 
     private fun showAlertDialog(latLng: LatLng) {

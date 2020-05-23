@@ -46,6 +46,8 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this@MainActivity, DisplayMapActivity::class.java)
                 intent.putExtra(EXTRA_USER_MAP, userMaps[position])
                 startActivity(intent)
+                // Плавная анимация, при выборе в меню.
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             }
         })
         rvMaps.adapter = mapAdapter
@@ -56,7 +58,6 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
-
 
 
 
@@ -89,7 +90,7 @@ class MainActivity : AppCompatActivity() {
         val mapFormView = LayoutInflater.from(this).inflate(R.layout.dialog_create_map, null)
         val dialog =
             AlertDialog.Builder(this)
-                .setTitle("Заголовок")
+                .setTitle("Создание новой карты")
                 .setView(mapFormView)
                 .setNegativeButton("Отменить",null)
                 .setPositiveButton("Сохранить", null)
@@ -132,7 +133,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun generateSampleData(): List<UserMap> {
+ /*   private fun generateSampleData(): List<UserMap> {
         return listOf(
             UserMap(
                 "Воспоминания номер 1 тайтл",
@@ -159,5 +160,5 @@ class MainActivity : AppCompatActivity() {
                 )
             )
         )
-    }
+    }*/
 }

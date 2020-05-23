@@ -55,6 +55,6 @@ class DisplayMapActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.addMarker(MarkerOptions().position(latLng).title(place.title).snippet(place.description))
         }
         // Фокус + расстояние карты (zoom-in)
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 1000, 1000, 0))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 800, 800, 0))
     }
 }
